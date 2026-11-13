@@ -111,7 +111,7 @@ function houseWalls(b, h) {
   b.box(dx, 1.45, HZ0, 0.38, 0.05, 0.1, K.trim);
   b.box(dx, 2.04, HZ0, 0.38, 0.07, 0.1, K.trim);
   b.box(dx, 0, HZ0 + 0.16, 0.52, 0.1, 0.3, K.stone);
-  b.box(dx, 0, HZ0 + 0.07, 0.52, 0.2, 0.14, K.stone);
+  b.box(dx, 0, HZ0 + 0.07, 0.46, 0.2, 0.14, K.stone);
   for (const wx of [x0 + 0.4, x0 + 1.1]) for (const wy of [0.55, 1.55]) {
     b.box(wx, wy, HZ1, 0.32, 0.55, 0.05, 0, { ch: 'glow' });
     b.box(wx, wy - 0.05, HZ1, 0.4, 0.05, 0.09, K.trim);
@@ -330,7 +330,7 @@ def('cn6', 'Antenna', ['cn5'], b => {
 CH = 6;
 def('plaza', 'Plaza', ['sidewalkS'], b => {
   b.box(0.2, 0, 3.85, 6.5, 0.05, 1.5, K.plaza);
-  b.box(0.2, 0, 2.73, 1.2, 0.05, 0.76, K.plaza);
+  b.box(0.2, 0, 2.725, 1.2, 0.05, 0.74, K.plaza);
   for (let x = -2.6; x <= 3.01; x += 0.65) b.box(x, 0.05, 3.85, 0.025, 0.005, 1.5, K.paveLine);
   b.box(0.2, 0, 4.74, 6.5, 0.12, 0.24, K.grassDark);
   for (let i = 0; i < 12; i++) b.box(-2.82 + i * 0.55, 0.12, 4.74, 0.16, 0.1, 0.16, [K.maple1, K.hat, K.maple3, K.lilac][i % 4]);
@@ -350,9 +350,9 @@ def('sign', 'TORONTO sign', ['plaza'], b => {
     const bh = H * 0.56, bc = H - bh / 2;
     const sh = roundRect(new THREE.Shape(), w, bh, 0.16, 0, bc);
     sh.holes.push(roundRect(new THREE.Path(), w - 2 * s, bh - 2 * s, 0.05, 0, bc));
-    b.plate(sh, t, x, y, z, K.letter, o);
+    b.plate(sh, t * 0.96, x, y, z, K.letter, o);
     const lx0 = x - 0.03, ly0 = H * 0.46, lx1 = x + w / 2 - s / 2, ly1 = 0.02;
-    b.boxC((lx0 + lx1) / 2, y + (ly0 + ly1) / 2, z, s, Math.hypot(lx1 - lx0, ly0 - ly1), t, K.letter, { ...o, rz: Math.atan2(lx1 - lx0, ly0 - ly1) });
+    b.boxC((lx0 + lx1) / 2, y + (ly0 + ly1) / 2, z, s, Math.hypot(lx1 - lx0, ly0 - ly1), t * 0.92, K.letter, { ...o, rz: Math.atan2(lx1 - lx0, ly0 - ly1) });
   };
   const N = x => {
     b.box(x - w / 2 + s / 2, y, z, s, H, t, K.letter, o);
@@ -435,7 +435,7 @@ def('mposts', 'Sign posts', ['plaza'], b => {
 def('marquee', 'Birthday sign', [], b => {
   const w = 3.1, h = 1.4, y0 = 0.95, bz = MZ + 0.1;
   b.box(MX, y0, MZ, w, h, 0.16, K.board);
-  b.add(new THREE.PlaneGeometry(w - 0.3, h - 0.3), '#fff', { ch: 'marquee', uv: true, x: MX, y: y0 + h / 2, z: MZ + 0.082 });
+  b.add(new THREE.PlaneGeometry(w - 0.3, h - 0.3), '#fff', { ch: 'marquee', uv: true, x: MX, y: y0 + h / 2, z: MZ + 0.09 });
   let i = 0;
   for (let x = -w / 2 + 0.08; x <= w / 2 - 0.07; x += 0.19)
     for (const yy of [y0 + 0.07, y0 + h - 0.07]) b.box(MX + x, yy - 0.03, bz, 0.06, 0.06, 0.04, 0, { ch: (i++ % 2) ? 'bulbA' : 'bulbB' });
