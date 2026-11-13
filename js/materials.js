@@ -28,7 +28,7 @@ export function glowTexture() {
   });
 }
 
-export function makeMaterials(renderer) {
+export function makeMaterials(renderer, imgs = {}) {
   const aniso = Math.min(4, renderer.capabilities.getMaxAnisotropy());
 
   const grain = canvasTex(256, 256, (g, w, h) => {
@@ -106,6 +106,15 @@ export function makeMaterials(renderer) {
     g.beginPath(); g.moveTo(w - 330, h); g.lineTo(w - 230, h - 70); g.lineTo(w - 200, h); g.closePath(); g.fill();
   });
 
+  const bill = canvasTex(512, 512, (g, w, h) => {
+    g.fillStyle = '#141414'; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(255,255,255,${rnd() * 0.05})`; g.fillRect(rnd() * w, rnd() * h, 1.5, 1.5); }
+    if (imgs.daga) {
+      const im = imgs.daga, k = Math.min(w / im.width, h / im.height) * 0.9;
+      g.drawImage(im, (w - im.width * k) / 2, (h - im.height * k) / 2, im.width * k, im.height * k);
+    }
+  });
+
   const lam = o => new THREE.MeshLambertMaterial({ flatShading: true, ...o });
   return {
     body: lam({ vertexColors: true, map: grain }),
@@ -121,5 +130,6 @@ export function makeMaterials(renderer) {
     tramsign: lam({ map: tram, emissive: 0xffffff, emissiveMap: tram, emissiveIntensity: 0.3 }),
     marquee: lam({ map: marquee, emissive: 0xffffff, emissiveMap: marquee, emissiveIntensity: 0.12 }),
     mural: lam({ map: mural }),
+    billboard: lam({ map: bill, emissive: 0xffffff, emissiveMap: bill, emissiveIntensity: 0.08 }),
   };
 }

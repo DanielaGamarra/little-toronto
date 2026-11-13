@@ -2,7 +2,7 @@
 
 A tiny wooden puzzle of Toronto, built piece by piece. A birthday gift for Joseline.
 
-- 49 laser-cut style pieces across 8 chapters: the base, Queen Street, a bay-and-gable row, the 504 streetcar, the Gooderham Flatiron, the CN Tower, the neighbourhood and a birthday surprise.
+- 50 laser-cut style pieces across 8 chapters: the base, Queen Street, a bay-and-gable row, the 504 streetcar, the Gooderham Flatiron (with a DAGA rooftop billboard), the CN Tower, the neighbourhood and a birthday surprise.
 - Tap a piece from the tray that snaps onto something already built. Drag to turn the city, pinch or scroll to zoom. Some pieces hide on the back.
 - When the last piece lands the city lights up for the night.
 

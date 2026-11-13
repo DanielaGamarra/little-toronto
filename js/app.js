@@ -69,7 +69,8 @@ export async function startApp() {
   table.position.y = -0.76; table.receiveShadow = true; scene.add(table);
 
   // ---------- pieces ----------
-  const mats = makeMaterials(renderer);
+  const dagaImg = await new Promise(r => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = 'assets/daga.png'; });
+  const mats = makeMaterials(renderer, { daga: dagaImg });
   const gTex = glowTexture();
   const spriteMats = {};
   const glowSprites = [];
@@ -425,6 +426,7 @@ export async function startApp() {
     mats.beacon.emissiveIntensity = 0.25 + 1.4 * k;
     mats.tramsign.emissiveIntensity = 0.3 + 0.9 * k;
     mats.marquee.emissiveIntensity = 0.12 + 0.75 * k;
+    mats.billboard.emissiveIntensity = 0.08 + 0.85 * k;
     for (const sm of Object.values(spriteMats)) sm.opacity = 0.85 * k;
     document.body.classList.toggle('night', k > 0.5);
   }
