@@ -1,7 +1,7 @@
 // Little Toronto: every model is split into puzzle pieces like a laser-cut wooden kit.
 // Each piece lists the pieces it snaps onto (needs). Order below is the build order.
 import * as THREE from 'three';
-import { shape, roundRect, leafPts, cloudPts, blob, grow, edgeWindows } from './builder.js';
+import { shape, roundRect, leafPts, cloudPts, blob, grow, edgeWindows } from './builder.js?v=20261113183345';
 
 const PI = Math.PI;
 export const K = {

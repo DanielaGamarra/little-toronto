@@ -15,3 +15,5 @@ npx serve .
 ```
 
 Works on phones, tablets and desktop browsers.
+
+Before each commit run `sh scripts/bump.sh` so browsers fetch the new files instead of cached ones.
