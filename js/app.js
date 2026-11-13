@@ -8,6 +8,7 @@ import { Sound } from './sound.js';
 
 const $ = s => document.querySelector(s);
 const V3 = THREE.Vector3;
+const TOUCH = matchMedia('(pointer: coarse)').matches;
 const PI = Math.PI, THETA0 = PI / 4, PHI0 = 0.98, SLOTS = 4;
 const lerp = (a, b, t) => a + (b - a) * t;
 const ease = {
@@ -388,7 +389,7 @@ export async function startApp() {
       if (step === 1) { coach('Every piece snaps onto something already built.<br><b>Start with the bottom board.</b> Tap it!'); pointAtCard('base1'); }
       else if (step === 2) { coach('Nice! Look at the model, then <b>pick the piece that sits on top of it.</b>'); pointAtCard('base2'); }
       else if (step === 3) {
-        coach('<b>Drag</b> to turn the city around and <b>pinch</b> to zoom. Some pieces hide on the back!', 'Got it');
+        coach(TOUCH ? '<b>Drag</b> to turn the city around and <b>pinch</b> to zoom. Some pieces hide on the back!' : '<b>Drag</b> to turn the city around and <b>scroll</b> to zoom. Some pieces hide on the back!', 'Got it');
         handTarget = 'drag'; ui.hand.hidden = false; ui.hand.className = 'swipe'; positionHand();
       } else hide();
     }
