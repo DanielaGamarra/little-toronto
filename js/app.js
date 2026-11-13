@@ -574,6 +574,8 @@ export async function startApp() {
     ui.intro.hidden = false;
     $('#introGo').textContent = placed.size ? 'Keep building' : 'Open the box';
     $('#introMeta').textContent = placed.size ? `${placed.size} of ${TOTAL} pieces placed` : `${TOTAL} wooden pieces · about 10 minutes`;
+    $('#introReset').hidden = !placed.size;
+    $('#introReset').addEventListener('click', async () => { if (await ask('Take the whole city apart and start from zero?')) rebuild(); });
     $('#introGo').addEventListener('click', () => {
       ui.intro.hidden = true; sound.tap(); lastAction = performance.now();
       if (!placed.size) banner(0);
