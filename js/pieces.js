@@ -5,7 +5,7 @@ import { shape, roundRect, leafPts, cloudPts, blob, grow, edgeWindows } from './
 
 const PI = Math.PI;
 export const K = {
-  woodDark: '#b98a5c', woodMid: '#dcb98c', grass: '#9cc27a', grassDark: '#7fae5f',
+  woodDark: '#b98a5c', woodMid: '#dcb98c', grass: '#adbb6a', grassDark: '#8e9b4e',
   water: '#5fb4d6', waterLight: '#c4e8f2', sand: '#ecd9ae',
   pave: '#d9d2c4', paveLine: '#bfb6a6', curb: '#c4bba9', asphalt: '#5e616b', crossing: '#f3efe6',
   trackBed: '#8d9098', rail: '#c7cdd3', pole: '#4f5a63', wire: '#3b3f46', bird: '#fbf1dc',
@@ -353,7 +353,7 @@ def('plaza', 'Plaza', ['sidewalkS'], b => {
   b.box(0.2, 0, 2.725, 1.2, 0.05, 0.74, K.plaza);
   for (let x = -2.6; x <= 3.01; x += 0.65) b.box(x, 0.05, 3.85, 0.025, 0.005, 1.5, K.paveLine);
   b.box(0.2, 0, 4.74, 6.5, 0.12, 0.24, K.grassDark);
-  for (let i = 0; i < 12; i++) b.box(-2.82 + i * 0.55, 0.12, 4.74, 0.16, 0.1, 0.16, [K.maple1, K.hat, K.maple3, K.lilac][i % 4]);
+  for (let i = 0; i < 12; i++) b.box(-2.82 + i * 0.55, 0.12, 4.74, 0.16, 0.1, 0.16, [K.maple1, K.maple3, '#c2562a', K.mustard][i % 4]);
 });
 def('sign', 'TORONTO sign', ['plaza'], b => {
   const H = 0.85, s = 0.17, t = 0.24, w = 0.6, pitch = 0.76, z = 3.75, y = 0.05;
@@ -403,6 +403,77 @@ def('tree1top', 'Maple leaves', ['tree1'], b => {
     b.plate(shape(leafPts(0.1)), 0.02, TRX + Math.cos(a) * (0.7 + (i % 2) * 0.4), 0.07, TRZ + Math.sin(a) * (0.6 + (i % 3) * 0.2), cols[i % 3], { rx: -PI / 2, rz: a });
   }
 });
+const smallTree = (b, x, z, c1, c2, R) => {
+  b.cyl(x, 0, z, R * 0.45, 0.05, K.grassDark, { seg: 8 });
+  b.cyl(x, 0.04, z, 0.08, 1.0, K.trunk, { rt: 0.05, seg: 6 });
+  const cy = 0.95 + R * 0.6;
+  b.plate(shape(cloudPts(R, 6, 0.16, 0.85, 0.2)), 0.08, x, cy, z, c1, { ry: 0.3 });
+  b.plate(shape(cloudPts(R * 0.92, 6, 0.16, 0.85, 0.9)), 0.08, x, cy, z, c2, { ry: 0.3 + PI / 2 });
+  b.plate(shape(cloudPts(R * 0.6, 5, 0.18, 0.85, 0.4)), 0.08, x, cy + R * 0.45, z, c1, { ry: 0.3 + PI / 4 });
+};
+def('trees2', 'Autumn trees', ['tree1top'], b => {
+  smallTree(b, -3.3, -3.15, K.maple3, K.maple2, 0.5);
+  smallTree(b, -6.7, -1.95, K.maple2, K.maple1, 0.55);
+  smallTree(b, 6.85, 2.95, K.maple1, K.maple3, 0.5);
+});
+const pumpkin = (b, x, y, z, r) => {
+  b.cyl(x, y, z, r, r * 1.1, '#e8782a', { seg: 9, rt: r * 0.9 });
+  b.cyl(x, y + r * 1.1, z, r * 0.15, r * 0.4, K.trunk, { seg: 5 });
+};
+def('leaves', 'Fallen leaves & pumpkins', ['plaza', 'h2roof'], b => {
+  let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const cols = [K.maple1, K.maple2, K.maple3, '#c2562a'];
+  const zones = [ // [x0, x1, z0, z1, y]
+    [-7.0, 7.0, 2.4, 2.95, 0.01], [-7.0, -3.2, 3.6, 4.9, 0.01], [3.5, 6.9, 2.5, 5.0, 0.01],
+    [-7.2, 7.2, -1.33, -0.75, 0.105], [-7.2, 7.2, 1.75, 2.33, 0.105], [-2.7, 1.8, -4.05, -3.8, 0.01],
+  ];
+  for (let i = 0; i < 46; i++) {
+    const zn = zones[i % zones.length];
+    const x = zn[0] + rnd() * (zn[1] - zn[0]), z = zn[2] + rnd() * (zn[3] - zn[2]);
+    b.plate(shape(leafPts(0.07 + rnd() * 0.05)), 0.015, x, zn[4], z, cols[i % 4], { rx: -PI / 2, rz: rnd() * 6.28 });
+  }
+  for (const x0 of [-2.8, -1.25, 0.3]) pumpkin(b, x0 + 0.01, 0, -1.58, 0.075);
+  pumpkin(b, 3.3, 0.05, 4.45, 0.11); pumpkin(b, 3.48, 0.05, 4.32, 0.08);
+  for (let i = 0; i < 14; i++) {
+    const a = rnd() * 6.28, d = rnd() * 0.32;
+    b.plate(shape(leafPts(0.09)), 0.02, 4.75 + Math.cos(a) * d, 0.01 + rnd() * 0.12, 4.0 + Math.sin(a) * d * 0.7, cols[i % 4], { rx: -PI / 2 + (rnd() - 0.5) * 0.8, rz: rnd() * 6.28 });
+  }
+});
+const FUR = '#8a5a3a', FACE = '#ecc99d';
+function monkey(b, x, z, side, girl) {
+  const y = 0.05;
+  for (const s of [-1, 1]) b.box(x + s * 0.06, y, z, 0.08, 0.17, 0.09, FUR);
+  b.box(x, y + 0.15, z, 0.24, 0.24, 0.18, FUR);
+  b.box(x, y + 0.17, z + 0.09, 0.15, 0.17, 0.02, FACE);
+  b.box(x, y + 0.37, z, 0.3, 0.26, 0.24, FUR);
+  b.box(x, y + 0.39, z + 0.12, 0.23, 0.17, 0.02, FACE);
+  b.box(x, y + 0.38, z + 0.14, 0.15, 0.08, 0.05, FACE);
+  for (const s of [-1, 1]) {
+    b.box(x + s * 0.055, y + 0.48, z + 0.131, 0.035, 0.045, 0.01, K.raccoonDark);
+    b.cyl(x + s * 0.17, y + 0.47, z, 0.065, 0.04, FUR, { c: true, rz: PI / 2, seg: 10 });
+    b.cyl(x + s * 0.19, y + 0.47, z, 0.042, 0.012, FACE, { c: true, rz: PI / 2, seg: 10 });
+  }
+  b.box(x, y + 0.405, z + 0.166, 0.07, 0.015, 0.01, K.raccoonDark);
+  // outer arm hangs, inner arm reaches to hold hands
+  b.box(x - side * 0.16, y + 0.14, z, 0.07, 0.22, 0.07, FUR);
+  b.boxC(x + side * 0.19, y + 0.24, z + 0.04, 0.07, 0.2, 0.07, FUR, { rz: side * 1.1 });
+  // curly tail
+  for (let i = 0; i < 4; i++) b.cyl(x - side * (0.05 + i * 0.04), y + 0.12 + i * 0.07, z - 0.12 - Math.sin(i) * 0.04, 0.025, 0.08, FUR, { c: true, rx: 0.9, seg: 6 });
+  if (girl) {
+    b.box(x, y + 0.27, z, 0.27, 0.06, 0.21, '#c94a3a');
+    b.cyl(x, y + 0.08, z, 0.16, 0.12, '#ff8fb3', { rt: 0.12, seg: 10 });
+    for (const s of [-1, 1]) b.boxC(x + 0.06 + s * 0.06, y + 0.55, z + 0.02, 0.09, 0.07, 0.04, '#ff6f9f', { rz: s * 0.4 });
+    b.boxC(x + 0.06, y + 0.55, z + 0.03, 0.04, 0.05, 0.05, '#e04a7d');
+  } else {
+    b.box(x, y + 0.27, z, 0.27, 0.06, 0.21, K.mustard);
+    b.box(x + 0.07, y + 0.2, z + 0.1, 0.06, 0.1, 0.02, K.mustard);
+    b.box(x, y + 0.49, z, 0.32, 0.1, 0.26, '#3f6fb0');
+    b.box(x, y + 0.49, z, 0.33, 0.035, 0.27, '#f3efe6');
+    b.cyl(x, y + 0.59, z, 0.05, 0.08, '#f3efe6', { seg: 8 });
+  }
+}
+def('monkeyBoy', 'Monkey (boy)', ['sign'], b => monkey(b, 1.6, 4.32, 1, false));
+def('monkeyGirl', 'Monkey (girl)', ['sign'], b => monkey(b, 2.05, 4.32, -1, true));
 const lamp = (b, x, z, dir) => {
   b.cyl(x, 0.1, z, 0.07, 0.12, K.lamp, { seg: 8 });
   b.cyl(x, 0.1, z, 0.04, 1.95, K.lamp, { seg: 6 });
