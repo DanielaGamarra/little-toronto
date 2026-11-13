@@ -1,7 +1,7 @@
 // Little Toronto: every model is split into puzzle pieces like a laser-cut wooden kit.
 // Each piece lists the pieces it snaps onto (needs). Order below is the build order.
 import * as THREE from 'three';
-import { shape, roundRect, leafPts, cloudPts, blob, grow, edgeWindows } from './builder.js?v=20261113183615';
+import { shape, roundRect, leafPts, cloudPts, blob, grow, edgeWindows } from './builder.js?v=20261113185742';
 
 const PI = Math.PI;
 export const K = {
@@ -504,23 +504,23 @@ def('mposts', 'Sign posts', ['plaza'], b => {
   }
 });
 def('billboard', 'Rooftop billboard', [], b => {
-  const cx = 4.75, cz = -3.05, y0 = 4.85, ry = PI / 4, W = 1.3, H = 1.29;
+  const cx = 4.75, cz = -3.05, y0 = 4.85, ry = PI / 4, W = 0.9, H = 0.89;
   const dx = Math.sin(ry), dz = Math.cos(ry), sx = Math.cos(ry), sz = -Math.sin(ry);
-  const fy = y0 + 0.7;
+  const fy = y0 + 0.5;
   for (const s of [-1, 1]) {
-    const lx = cx + sx * s * 0.48, lz = cz + sz * s * 0.48;
-    b.box(lx, y0, lz, 0.07, 0.72, 0.07, K.pole);
-    b.box(lx - dx * 0.25, y0, lz - dz * 0.25, 0.06, 0.6, 0.06, K.pole);
+    const lx = cx + sx * s * 0.33, lz = cz + sz * s * 0.33;
+    b.box(lx, y0, lz, 0.06, 0.52, 0.06, K.pole);
+    b.box(lx - dx * 0.18, y0, lz - dz * 0.18, 0.05, 0.42, 0.05, K.pole);
   }
-  b.box(cx + dx * 0.16, y0 + 0.58, cz + dz * 0.16, W + 0.1, 0.04, 0.3, K.pole, { ry });
-  b.box(cx, fy - 0.06, cz, W + 0.12, H + 0.12, 0.1, K.black, { ry });
-  b.add(new THREE.PlaneGeometry(W, H), '#fff', { ch: 'billboard', uv: true, x: cx + dx * 0.052, y: fy + H / 2, z: cz + dz * 0.052, ry });
-  for (const s of [-0.4, 0.4]) {
-    const ax = cx + sx * s, az = cz + sz * s, top = fy + H + 0.06;
-    b.box(ax + dx * 0.15, top, az + dz * 0.15, 0.04, 0.04, 0.32, K.pole, { ry });
-    b.box(ax + dx * 0.3, top - 0.06, az + dz * 0.3, 0.16, 0.08, 0.1, K.pole, { ry });
-    b.box(ax + dx * 0.3, top - 0.075, az + dz * 0.3, 0.12, 0.02, 0.07, 0, { ch: 'light', ry });
-    b.glow(ax + dx * 0.4, fy + H * 0.7, az + dz * 0.4, 1.4, '#fff2cf');
+  b.box(cx + dx * 0.12, y0 + 0.4, cz + dz * 0.12, W + 0.08, 0.03, 0.22, K.pole, { ry });
+  b.box(cx, fy - 0.045, cz, W + 0.09, H + 0.09, 0.08, K.black, { ry });
+  b.add(new THREE.PlaneGeometry(W, H), '#fff', { ch: 'billboard', uv: true, x: cx + dx * 0.042, y: fy + H / 2, z: cz + dz * 0.042, ry });
+  for (const s of [-0.27, 0.27]) {
+    const ax = cx + sx * s, az = cz + sz * s, top = fy + H + 0.045;
+    b.box(ax + dx * 0.11, top, az + dz * 0.11, 0.03, 0.03, 0.24, K.pole, { ry });
+    b.box(ax + dx * 0.22, top - 0.05, az + dz * 0.22, 0.12, 0.06, 0.08, K.pole, { ry });
+    b.box(ax + dx * 0.22, top - 0.062, az + dz * 0.22, 0.09, 0.015, 0.05, 0, { ch: 'light', ry });
+    b.glow(ax + dx * 0.3, fy + H * 0.7, az + dz * 0.3, 1.0, '#fff2cf');
   }
 }, { secret: true });
 def('marquee', 'Birthday sign', [], b => {
