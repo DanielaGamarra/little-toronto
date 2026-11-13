@@ -379,12 +379,14 @@ export async function startApp() {
     function pointAtCard(id) { handTarget = id; ui.hand.hidden = false; ui.hand.className = 'tap'; positionHand(); }
     function positionHand() {
       if (ui.hand.hidden) return;
-      if (handTarget === 'drag') { ui.hand.style.left = `${innerWidth / 2 - 24}px`; ui.hand.style.top = `${innerHeight * 0.38}px`; return; }
-      const i = slots.indexOf(handTarget); if (i < 0) { ui.hand.hidden = true; return; }
+      if (handTarget === 'drag') { slotEls.forEach(e => e.classList.remove('tut')); ui.hand.style.left = `${innerWidth / 2 - 22}px`; ui.hand.style.top = `${innerHeight * 0.38}px`; return; }
+      const i = slots.indexOf(handTarget); if (i < 0) { ui.hand.hidden = true; slotEls.forEach(e => e.classList.remove('tut')); return; }
       const r = slotEls[i].getBoundingClientRect();
-      ui.hand.style.left = `${r.left + r.width / 2 - 18}px`; ui.hand.style.top = `${r.top + r.height * 0.35}px`;
+      const c = slotEls[i].querySelector('.cut').getBoundingClientRect();
+      ui.hand.style.left = `${c.left + c.width / 2 - 22}px`; ui.hand.style.top = `${c.top + c.height / 2 - 22}px`;
+      slotEls.forEach((e, j) => e.classList.toggle('tut', j === i));
     }
-    function hide() { ui.coach.hidden = true; ui.hand.hidden = true; handTarget = null; }
+    function hide() { ui.coach.hidden = true; ui.hand.hidden = true; handTarget = null; slotEls.forEach(e => e.classList.remove('tut')); }
     function show() {
       if (step === 1) { coach('Every piece snaps onto something already built.<br><b>Start with the bottom board.</b> Tap it!'); pointAtCard('base1'); }
       else if (step === 2) { coach('Nice! Look at the model, then <b>pick the piece that sits on top of it.</b>'); pointAtCard('base2'); }
