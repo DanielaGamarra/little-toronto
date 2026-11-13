@@ -98,6 +98,9 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .card .lbl { font-size: 10.5px; font-weight: 800; color: #5a3a22; line-height: 1.1; text-align: center; min-height: 2.2em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .card:active .cut { transform: scale(.94); }
 .card.empty { pointer-events: none; }
+.card.secret .cut { background: repeating-linear-gradient(45deg, #e9c993 0 10px, #e2bf86 10px 20px); position: relative; }
+.card.secret .cut::after { content: '?'; position: absolute; inset: 0; display: grid; place-items: center; font-family: 'Fraunces', Georgia, serif; font-weight: 900; font-size: 40px; color: var(--red); text-shadow: 0 2px 0 #fff8; }
+.card.secret img { opacity: 0; }
 .card.empty .cut { background: #00000008; box-shadow: inset 0 0 0 1.5px #8a5a3533; }
 .card.empty img { opacity: 0; }
 .card.enter .cut { animation: enter .45s cubic-bezier(.3, 1.5, .5, 1); }

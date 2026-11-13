@@ -1,7 +1,7 @@
 // Little Toronto: every model is split into puzzle pieces like a laser-cut wooden kit.
 // Each piece lists the pieces it snaps onto (needs). Order below is the build order.
 import * as THREE from 'three';
-import { shape, roundRect, leafPts, cloudPts, blob, grow, edgeWindows } from './builder.js?v=20261113183345';
+import { shape, roundRect, leafPts, cloudPts, blob, grow, edgeWindows } from './builder.js?v=20261113183615';
 
 const PI = Math.PI;
 export const K = {
@@ -25,7 +25,7 @@ export const CHAPTERS = [
   { name: 'Queen Street', fact: 'Toronto runs one of the busiest streetcar networks in North America.', focus: [0, 1.2, 0.4], zoom: 1.7 },
   { name: 'Bay-and-gable row', fact: 'Bay-and-gable houses are a Toronto original, built by the thousands in the late 1800s.', focus: [-0.5, 1.7, -2.8], zoom: 2.0 },
   { name: 'The 504 streetcar', fact: 'The 504 King is one of the busiest streetcar routes in the city.', focus: [0.4, 1.4, 0.5], zoom: 2.1 },
-  { name: 'Gooderham Flatiron', fact: 'Finished in 1892, a whole decade before New York got its Flatiron.', focus: [4.6, 3.4, -2.8], zoom: 1.65 },
+  { name: 'Gooderham Flatiron', fact: 'Finished in 1892, a whole decade before New York got its Flatiron.', focus: [4.6, 2.7, -2.8], zoom: 1.9 },
   { name: 'CN Tower', fact: '553 metres of concrete. On a clear day you can see right across Lake Ontario.', focus: null },
   { name: 'The neighbourhood', fact: 'Raccoons run this town. Toronto even built raccoon-proof green bins.', focus: [0.3, 1.0, 2.4], zoom: 1.5 },
   { name: 'Birthday surprise', fact: 'One last piece. It has your name on it.', focus: null },
@@ -276,26 +276,6 @@ def('fl5', 'Turret & flag', ['fl4'], b => {
   b.box(tx + 0.30, 5.95, tz, 0.08, 0.2, 0.015, K.signRed);
   b.box(tx + 0.18, 6.01, tz, 0.07, 0.08, 0.02, K.signRed);
 });
-def('billboard', 'Rooftop billboard', ['fl4'], b => {
-  const cx = 4.75, cz = -3.05, y0 = 4.85, ry = PI / 4, W = 1.95, H = 1.93;
-  const dx = Math.sin(ry), dz = Math.cos(ry), sx = Math.cos(ry), sz = -Math.sin(ry);
-  const fy = y0 + 0.85;
-  for (const s of [-1, 1]) {
-    const lx = cx + sx * s * 0.7, lz = cz + sz * s * 0.7;
-    b.box(lx, y0, lz, 0.08, 0.86, 0.08, K.pole);
-    b.box(lx - dx * 0.25, y0, lz - dz * 0.25, 0.06, 0.6, 0.06, K.pole);
-  }
-  b.box(cx + dx * 0.16, y0 + 0.72, cz + dz * 0.16, W + 0.1, 0.04, 0.3, K.pole, { ry });
-  b.box(cx, fy - 0.06, cz, W + 0.12, H + 0.12, 0.1, K.black, { ry });
-  b.add(new THREE.PlaneGeometry(W, H), '#fff', { ch: 'billboard', uv: true, x: cx + dx * 0.052, y: fy + H / 2, z: cz + dz * 0.052, ry });
-  for (const s of [-0.6, 0.6]) {
-    const ax = cx + sx * s, az = cz + sz * s, top = fy + H + 0.06;
-    b.box(ax + dx * 0.15, top, az + dz * 0.15, 0.04, 0.04, 0.32, K.pole, { ry });
-    b.box(ax + dx * 0.3, top - 0.06, az + dz * 0.3, 0.16, 0.08, 0.1, K.pole, { ry });
-    b.box(ax + dx * 0.3, top - 0.075, az + dz * 0.3, 0.12, 0.02, 0.07, 0, { ch: 'light', ry });
-    b.glow(ax + dx * 0.4, fy + H * 0.7, az + dz * 0.4, 1.4, '#fff2cf');
-  }
-});
 def('mural', 'Flatiron mural', ['fl3'], b => {
   b.add(new THREE.PlaneGeometry(4.0, 2.82), '#fff', { ch: 'mural', uv: true, x: 4.6, y: 2.45, z: -3.765, ry: PI });
 }, { view: 0.88 * PI });
@@ -523,6 +503,26 @@ def('mposts', 'Sign posts', ['plaza'], b => {
     b.cyl(MX + s * 1.42, 2.42, MZ, 0.1, 0.1, K.maple3, { seg: 8 });
   }
 });
+def('billboard', 'Rooftop billboard', [], b => {
+  const cx = 4.75, cz = -3.05, y0 = 4.85, ry = PI / 4, W = 1.3, H = 1.29;
+  const dx = Math.sin(ry), dz = Math.cos(ry), sx = Math.cos(ry), sz = -Math.sin(ry);
+  const fy = y0 + 0.7;
+  for (const s of [-1, 1]) {
+    const lx = cx + sx * s * 0.48, lz = cz + sz * s * 0.48;
+    b.box(lx, y0, lz, 0.07, 0.72, 0.07, K.pole);
+    b.box(lx - dx * 0.25, y0, lz - dz * 0.25, 0.06, 0.6, 0.06, K.pole);
+  }
+  b.box(cx + dx * 0.16, y0 + 0.58, cz + dz * 0.16, W + 0.1, 0.04, 0.3, K.pole, { ry });
+  b.box(cx, fy - 0.06, cz, W + 0.12, H + 0.12, 0.1, K.black, { ry });
+  b.add(new THREE.PlaneGeometry(W, H), '#fff', { ch: 'billboard', uv: true, x: cx + dx * 0.052, y: fy + H / 2, z: cz + dz * 0.052, ry });
+  for (const s of [-0.4, 0.4]) {
+    const ax = cx + sx * s, az = cz + sz * s, top = fy + H + 0.06;
+    b.box(ax + dx * 0.15, top, az + dz * 0.15, 0.04, 0.04, 0.32, K.pole, { ry });
+    b.box(ax + dx * 0.3, top - 0.06, az + dz * 0.3, 0.16, 0.08, 0.1, K.pole, { ry });
+    b.box(ax + dx * 0.3, top - 0.075, az + dz * 0.3, 0.12, 0.02, 0.07, 0, { ch: 'light', ry });
+    b.glow(ax + dx * 0.4, fy + H * 0.7, az + dz * 0.4, 1.4, '#fff2cf');
+  }
+}, { secret: true });
 def('marquee', 'Birthday sign', [], b => {
   const w = 3.1, h = 1.4, y0 = 0.95, bz = MZ + 0.1;
   b.box(MX, y0, MZ, w, h, 0.16, K.board);
@@ -534,8 +534,9 @@ def('marquee', 'Birthday sign', [], b => {
     for (const xx of [-w / 2 + 0.07, w / 2 - 0.07]) b.box(MX + xx, yy - 0.03, bz, 0.06, 0.06, 0.04, 0, { ch: (i++ % 2) ? 'bulbA' : 'bulbB' });
   b.plate(shape(leafPts(0.32)), 0.1, MX, y0 + h + 0.28, MZ, K.maple1);
   b.glow(MX, y0 + h / 2, MZ + 0.5, 4.6, '#ffcf6a');
-});
+}, { secret: true });
 // the birthday sign goes last
+PIECES.find(p => p.id === 'billboard').needs = PIECES.filter(p => p.id !== 'marquee' && p.id !== 'billboard').map(p => p.id);
 PIECES.find(p => p.id === 'marquee').needs = PIECES.filter(p => p.id !== 'marquee').map(p => p.id);
 
 export const LAST_ID = 'marquee';

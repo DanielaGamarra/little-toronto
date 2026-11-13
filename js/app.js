@@ -1,10 +1,10 @@
 // Little Toronto: the game. Scene, camera, puzzle tray, tutorial, hints and the birthday finale.
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { Builder } from './builder.js?v=20261113183345';
-import { PIECES, CHAPTERS, LAST_ID, TRAM_IDS } from './pieces.js?v=20261113183345';
-import { makeMaterials, glowTexture } from './materials.js?v=20261113183345';
-import { Sound } from './sound.js?v=20261113183345';
+import { Builder } from './builder.js?v=20261113183615';
+import { PIECES, CHAPTERS, LAST_ID, TRAM_IDS } from './pieces.js?v=20261113183615';
+import { makeMaterials, glowTexture } from './materials.js?v=20261113183615';
+import { Sound } from './sound.js?v=20261113183615';
 
 const $ = s => document.querySelector(s);
 const V3 = THREE.Vector3;
@@ -69,7 +69,7 @@ export async function startApp() {
   table.position.y = -0.76; table.receiveShadow = true; scene.add(table);
 
   // ---------- pieces ----------
-  const dagaImg = await new Promise(r => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = 'assets/daga.png?v=20261113183345'; });
+  const dagaImg = await new Promise(r => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = 'assets/daga.png?v=20261113183615'; });
   const mats = makeMaterials(renderer, { daga: dagaImg });
   const gTex = glowTexture();
   const spriteMats = {};
@@ -106,9 +106,9 @@ export async function startApp() {
     ts.add(new THREE.HemisphereLight(0xfff6ea, 0x9a8a7a, 2.0));
     const d = new THREE.DirectionalLight(0xffffff, 2.2); d.position.set(4, 8, 6); ts.add(d);
     const tc = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 200);
-    tc.position.setFromSphericalCoords(60, 1.0, THETA0); tc.lookAt(0, 0, 0); tc.updateMatrixWorld();
     const inv = tc.matrixWorldInverse, v = new V3();
     for (const p of PIECES) {
+      tc.position.setFromSphericalCoords(60, 1.0, p.view ?? THETA0); tc.lookAt(0, 0, 0); tc.updateMatrixWorld();
       const g = p.group; ts.add(g); g.position.set(0, 0, 0); g.visible = true;
       let hw = 0.01;
       for (let i = 0; i < 8; i++) {
@@ -232,8 +232,10 @@ export async function startApp() {
     slots.forEach((id, i) => {
       const el = slotEls[i], p = id && byId[id];
       el.classList.toggle('empty', !p);
-      el.querySelector('img').src = p ? p.thumb : 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
-      el.querySelector('.lbl').textContent = p ? p.name : '';
+      const hide = p && p.secret;
+      el.classList.toggle('secret', !!hide);
+      el.querySelector('img').src = p && !hide ? p.thumb : 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
+      el.querySelector('.lbl').textContent = p ? (hide ? 'Surprise' : p.name) : '';
       el.dataset.id = id || '';
     });
   }
@@ -270,7 +272,7 @@ export async function startApp() {
     if (missing.length) {
       el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
       sound.nope();
-      if (id === LAST_ID) toast('Save this one for the very end!');
+      if (p.secret) toast(id === LAST_ID ? 'This surprise goes on last!' : 'A surprise for the end. Finish the rest first!');
       else {
         const m = byId[missing[0]];
         toast(missing.length > 1 && p.needs.length > 2 ? 'Not yet. Finish the pieces around it first.' : `This one snaps onto the ${m.name.toLowerCase()}. Place that first.`);
