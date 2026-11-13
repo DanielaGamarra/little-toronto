@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#f3e4cf">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Little Toronto">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Little Toronto</title>
+  <meta name="description" content="A wooden puzzle of Toronto, built piece by piece. A birthday gift for Joseline.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1 -1 2 2'%3E%3Cpath fill='%23d8352c' d='M0-1 .2-.6.42-.72.34-.28.72-.5.66-.3.95-.2.55.12.62.34.1.26.05.62.05.95-.05.95-.05.62-.1.26-.62.34-.55.12-.95-.2-.66-.3-.72-.5-.34-.28-.42-.72-.2-.6Z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="js/gate.js"></script>
+</head>
+<body>
+  <div class="backdrop"></div>
+  <canvas id="scene"></canvas>
+
+  <div id="loading" class="screen">
+    <div class="loader"><svg viewBox="-1 -1 2 2"><path d="M0-1 .2-.6.42-.72.34-.28.72-.5.66-.3.95-.2.55.12.62.34.1.26.05.62.05.95-.05.95-.05.62-.1.26-.62.34-.55.12-.95-.2-.66-.3-.72-.5-.34-.28-.42-.72-.2-.6Z"/></svg></div>
+    <p>Unpacking the box</p>
+  </div>
+
+  <header id="hud" hidden>
+    <div class="hud-main">
+      <div class="chap"><span id="chapNum">Chapter 1</span><b id="chapName">Opening the box</b></div>
+      <div class="bar"><i id="barFill"></i></div>
+    </div>
+    <div class="hud-btns">
+      <button id="btnHint" class="icon" aria-label="Show a hint">
+        <svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2V16h5v-.2c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3Z"/></svg>
+      </button>
+      <button id="btnSound" class="icon" aria-label="Sound on or off">
+        <svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path class="wave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="mute" d="M16 9l5 6M21 9l-5 6"/></svg>
+      </button>
+      <button id="btnParty" class="icon" aria-label="Birthday card" hidden>
+        <svg viewBox="0 0 24 24"><path d="M4 12h16v8H4zM3 8h18v4H3zM12 8v12M12 8c-2-4-6-3-5 0M12 8c2-4 6-3 5 0"/></svg>
+      </button>
+      <button id="btnMenu" class="icon" aria-label="Menu">
+        <svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <section id="tray" hidden>
+    <div class="tray-head"><span>Wooden pieces</span><span id="count">0 / 49</span></div>
+    <div id="slots"></div>
+  </section>
+
+  <div id="toast" role="status"></div>
+  <div id="banner"></div>
+  <div id="coach" hidden><p id="coachText"></p><button id="coachBtn" class="btn small" hidden>Got it</button></div>
+  <div id="hand" hidden><svg viewBox="0 0 24 24"><path d="M9 11V4.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5c0 3.6-2.4 6.5-6 6.5h-.7a6 6 0 0 1-4.6-2.2L4.4 15a1.6 1.6 0 0 1 2.4-2.1L9 15"/></svg></div>
+
+  <div id="intro" class="screen" hidden>
+    <div class="card-box">
+      <div class="box-lid">
+        <svg class="leaf" viewBox="-1 -1 2 2"><path d="M0-1 .2-.6.42-.72.34-.28.72-.5.66-.3.95-.2.55.12.62.34.1.26.05.62.05.95-.05.95-.05.62-.1.26-.62.34-.55.12-.95-.2-.66-.3-.72-.5-.34-.28-.42-.72-.2-.6Z"/></svg>
+        <small>A birthday puzzle for Joseline</small>
+        <h1>Little Toronto</h1>
+        <p class="sub">Red brick houses, the 504 streetcar, the Flatiron and the CN Tower, all cut from wood and waiting for you.</p>
+      </div>
+      <p id="introMeta" class="meta"></p>
+      <button id="introGo" class="btn">Open the box</button>
+    </div>
+  </div>
+
+  <div id="menu" class="sheet-wrap" hidden>
+    <div class="sheet">
+      <button id="menuRecenter" class="row">Recenter the view</button>
+      <button id="menuPhoto" class="row">Save a photo</button>
+      <button id="menuTutorial" class="row">Show the tutorial again</button>
+      <button id="menuReset" class="row danger">Start over</button>
+      <button id="menuClose" class="btn small">Close</button>
+    </div>
+  </div>
+
+  <div id="finale" class="screen clear" hidden>
+    <div class="card-box party">
+      <small>You built the whole city</small>
+      <h1>Happy birthday, Joseline!</h1>
+      <p class="sub">A little Toronto, one piece at a time. Here's to a year as warm as Queen Street at night.</p>
+      <p class="sign">With love, Daga</p>
+      <div class="btns">
+        <button id="finPhoto" class="btn">Save a photo</button>
+        <button id="finLights" class="btn ghost">Lights on / off</button>
+      </div>
+      <button id="finClose" class="btn small ghost">Keep looking around</button>
+      <button id="finAgain" class="link">Build it again</button>
+    </div>
+  </div>
+
+  <div id="gate" class="screen" hidden>
+    <div class="card-box">
+      <small>Little Toronto</small>
+      <h1>Made for your phone</h1>
+      <p class="sub">This little wooden city is built with your fingertips. Open it on your phone to start.</p>
+      <div id="gateQr" class="qr"></div>
+      <p id="gateUrl" class="meta"></p>
+    </div>
+  </div>
+</body>
+</html>
