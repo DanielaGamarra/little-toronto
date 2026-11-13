@@ -182,3 +182,7 @@ body.night #finale .card-box { background: #fffaf2f5; }
 .sheet .row:active { background: #8a5a3514; }
 .sheet .row.danger { color: var(--red); }
 .sheet .btn { margin-top: 6px; align-self: center; }
+.sheet.ask { text-align: center; gap: 8px; padding-top: 22px; }
+.sheet.ask p { margin: 0 0 8px; font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 20px; line-height: 1.3; }
+#ask { z-index: 45; }
+.party .btn.again { margin-top: 6px; }

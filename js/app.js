@@ -528,12 +528,26 @@ export async function startApp() {
   $('#menuRecenter').addEventListener('click', () => { ui.menu.hidden = true; tweenCam({ ...chapterView(done ? 7 : chapterIndex()), theta: THETA0, phi: PHI0 }, 0.9); });
   $('#menuTutorial').addEventListener('click', () => { ui.menu.hidden = true; if (!done) tut.replay(); });
   $('#menuPhoto').addEventListener('click', () => { ui.menu.hidden = true; photo(); });
-  $('#menuReset').addEventListener('click', () => { if (confirm('Take the whole city apart and start again?')) { store.clear(); location.reload(); } });
+  function ask(text) {
+    return new Promise(res => {
+      const box = $('#ask'); $('#askText').textContent = text; box.hidden = false;
+      const close = v => { box.hidden = true; $('#askYes').onclick = $('#askNo').onclick = box.onclick = null; res(v); };
+      $('#askYes').onclick = () => close(true);
+      $('#askNo').onclick = () => close(false);
+      box.onclick = e => { if (e.target === box) close(false); };
+    });
+  }
+  function rebuild() {
+    const tutDone = store.get('tut', 0);
+    store.clear(); if (tutDone >= 4) store.set('tut', 4);
+    location.reload();
+  }
+  $('#menuReset').addEventListener('click', async () => { ui.menu.hidden = true; if (await ask('Take the whole city apart and build it again?')) rebuild(); });
   $('#finPhoto').addEventListener('click', photo);
   $('#finLights').addEventListener('click', () => { nightTarget = nightTarget > 0.5 ? 0 : 1; });
   $('#finClose').addEventListener('click', () => { ui.finale.hidden = true; setFrustum(); $('#btnParty').hidden = false; controls.autoRotate = true; controls.autoRotateSpeed = 0.5; });
   $('#btnParty').addEventListener('click', () => { $('#btnParty').hidden = true; showFinaleCard(); });
-  $('#finAgain').addEventListener('click', () => { if (confirm('Take the whole city apart and build it again?')) { const tutDone = store.get('tut', 0); store.clear(); store.set('tut', tutDone); location.reload(); } });
+  $('#finAgain').addEventListener('click', async () => { if (await ask('Take the whole city apart and build it again?')) rebuild(); });
   canvas.addEventListener('pointerdown', () => { controls.autoRotate = false; });
   document.addEventListener('gesturestart', e => e.preventDefault());
 
