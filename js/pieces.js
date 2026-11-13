@@ -102,6 +102,7 @@ function houseWalls(b, h) {
   b.box(xc, 0, zc, HW, HH, HD, h.brick, { ch: 'brick' });
   b.box(xc, 0, zc, HW + 0.03, 0.28, HD + 0.03, K.stone);
   b.box(xc, HH - 0.12, zc, HW + 0.04, 0.12, HD + 0.04, K.trim);
+  b.box(xc, HH, zc, HW + 0.02, 0.015, HD + 0.02, K.woodMid);
   const dx = x0 + 0.36;
   b.box(dx, 0.28, HZ0, 0.36, 0.78, 0.07, h.door);
   b.box(dx, 1.08, HZ0, 0.34, 0.14, 0.05, 0, { ch: 'glow' });

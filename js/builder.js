@@ -9,13 +9,13 @@ const _p = new THREE.Vector3(), _s = new THREE.Vector3(), _c = new THREE.Color()
 // texture tiling per channel (world units -> uv)
 const UVS = { body: 0.45, brick: 1.3, water: 0.35, letters: 0.45 };
 
-function worldUV(g, k) {
+function worldUV(g, k, plainTops = false) {
   const p = g.attributes.position, n = g.attributes.normal;
   const uv = new Float32Array(p.count * 2);
   for (let i = 0; i < p.count; i++) {
     const ax = Math.abs(n.getX(i)), ay = Math.abs(n.getY(i)), az = Math.abs(n.getZ(i));
     let u, v;
-    if (ay >= ax && ay >= az) { u = p.getX(i); v = p.getZ(i); }
+    if (ay >= ax && ay >= az) { if (plainTops) { u = 0.1; v = 0.06; } else { u = p.getX(i) * k; v = p.getZ(i) * k; } uv[i * 2] = u; uv[i * 2 + 1] = v; continue; }
     else if (ax >= az) { u = p.getZ(i); v = p.getY(i); }
     else { u = p.getX(i); v = p.getY(i); }
     uv[i * 2] = u * k; uv[i * 2 + 1] = v * k;
@@ -39,7 +39,7 @@ export class Builder {
     _s.set(o.sx || 1, o.sy || 1, o.sz || 1);
     g.applyMatrix4(_m.compose(_p, _q, _s));
     const ch = o.ch || 'body';
-    if (!o.uv) worldUV(g, UVS[ch] ?? 1);
+    if (!o.uv) worldUV(g, UVS[ch] ?? 1, ch === 'brick');
     const n = g.attributes.position.count, a = new Float32Array(n * 3);
     _c.set(color || 0xffffff);
     for (let i = 0; i < n; i++) { a[i * 3] = _c.r; a[i * 3 + 1] = _c.g; a[i * 3 + 2] = _c.b; }
